@@ -1,0 +1,27 @@
+{
+  "name": "home_smart",
+  "version": "1.0.0",
+  "description": "smart_home",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./source/src/server.js"
+  },
+  "keywords": [
+    "home_smart"
+  ],
+  "author": "phuongthao",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "16.0.3",
+    "ejs": "3.1.8",
+    "express": "4.18.2",
+    "mqtt": "^5.10.1",
+    "mysql": "^2.18.1",
+    "mysql2": "2.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

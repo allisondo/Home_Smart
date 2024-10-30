@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+    <!-- Date, Time, and Time Zone Display -->
+    <div class="bg-pink text-white p-2 d-flex flex-column align-items-center">
+        <div class="d-flex justify-content-between w-100 mb-2">
+            <div id="datetime" class="text-start datetime"></div>
+            <div class="datetime text-end">
+                <p id="timezone"></p>
+            </div>
+        </div>
+        <h1 class="m-0">HOME ASSISTANT</h1>
+    </div>
+
+
+    <!-- Navigation Tabs -->
+    <header class="bg-pink1 text-white text-center py-2 mb-4">
+        <nav class="nav justify-content-center">
+            <a class="nav-link text-white" href="#">HOME</a>
+            <a class="nav-link text-white" href="HomeBD.html">DATA SENSOR</a>
+            <a class="nav-link text-white" href="Activity_History.html">ACTIVITY HISTORY</a>
+            <a class="nav-link text-white" href="Profile.html">PERSONAL PROFILE</a>
+        </nav>
+    </header>
+    <!-- Container -->
+    <div class="container">
+     <!-- Top Section: Display Temperature, Humidity, Light -->
+ <!-- Top Section: Display Temperature, Humidity, Light -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="card-title text-center">Room Status</h2>
+        <div class="room-status">
+            <!-- Temperature -->
+            <div class="status-item temperature">
+                <p class="mb-0"><i id="temperatureIcon" class="fas fa-thermometer-half"></i> Temperature</p>
+                <span id="temperatureDisplay">28.5 °C</span>
+            </div>
+            <!-- Humidity -->
+            <div class="status-item humidity">
+                <p class="mb-0"><i id="humidityIcon" class="fas fa-tint"></i> Humidity</p>
+                <span id="humidityDisplay">78%</span>
+            </div>
+            <!-- Light -->
+            <div class="status-item light">
+                <p class="mb-0"><i id="lightIcon1" class="fas fa-sun"></i> Light</p>
+                <span id="lightDisplay">500 lux</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+ 
+   
+        <!-- Bottom Section: Chart and Controls -->
+        <div class="row">
+            <!-- Left: Chart -->
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Room Data</h2>
+                        <!-- <canvas id="roomChart"></canvas>-->
+                        <canvas id="roomChart" width="400" height="100"></canvas>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Right: Controls -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Controls</h2>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="mb-0"><i id="fanIcon" class="fas fa-fan"></i> Fan</p>
+                            <div>
+                                <button type="button" class="btn btn-success me-2" id="fanOn">ON</button>
+                                <button type="button" class="btn btn-danger" id="fanOff">OFF</button>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="mb-0"><i id="lightIcon" class="fas fa-lightbulb"></i> Light</p>
+                            <div>
+                                <button type="button" class="btn btn-success me-2" id="lightOn">ON</button>
+                                <button type="button" class="btn btn-danger" id="lightOff">OFF</button>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="mb-0"><i id="acIcon" class="fas fa-wind"></i> Air Conditioner</p>
+                            <div>
+                                <button type="button" class="btn btn-success me-2" id="acOn">ON</button>
+                                <button type="button" class="btn btn-danger" id="acOff">OFF</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+
+
+</body>
+</html>

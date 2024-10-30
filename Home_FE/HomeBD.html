@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Sensor</title>
+    <link rel="stylesheet" href="stylesBD.css">
+</head>
+<body>
+    <div class="header">
+        <h1>DATA SENSOR</h1>
+        <div class="tabs">
+            <a href="Home.html">HOME ASSISTANT</a>
+            <a class="nav-link text-white" href="Activity_History.html">ACTIVITY HISTORY</a>
+            <a class="nav-link text-white" href="Profile.html">PERSONAL PROFILE</a>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <label for="searchOption"> Filter:</label>
+        <select id="searchOption">
+            <option value="all">ALL</option>
+            <option value="temperature">Temperature</option>
+            <option value="humidity">Humidity</option>
+            <option value="light">Light</option>
+        </select>
+    
+   
+     
+     <label for="searchValue">Tìm kiếm:</label> <!-- nhập text thời gian để tìm kiếm-->
+     <input type="text" id="searchValue" placeholder="Enter value to search">
+        <button onclick="performSearch()">Search</button>
+    </div>
+    
+   
+    <div class="table-container">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Temperature (°C)</th>
+                    <th>Humidity (%)</th>
+                    <th>Light (Lumens)</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data rows will be added here -->
+               
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="pagination">
+        <label for="pageSize">Page size:</label>
+        <select id="pageSize" onchange="changePageSize()">
+            <option value="5" selected>5</option>
+            <option value="10" >10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+        </select>
+        <button onclick="prevPage()">Previous</button>
+        <span id="page-info"></span>
+        <button onclick="nextPage()">Next</button>
+    </div>
+    
+
+
+    <script src="pagination.js"></script>
+</body>
+</html>

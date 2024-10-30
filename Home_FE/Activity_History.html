@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity History</title>
+    <link rel="stylesheet" href="stylesHistory.css">
+</head>
+<body>
+    <div class="header">
+        <h1>ACTIVITY HISTORY</h1>
+        <div class="tabs">
+            <a href="Home.html">HOME ASSISTANT</a>
+            <a class="nav-link text-white" href="HomeBD.html">DATA SENSOR</a>
+            <a class="nav-link text-white" href="Profile.html">PERSONAL PROFILE</a>
+        </div>
+    </div>
+
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search by device name or time">
+        <button onclick="performSearch()">Search</button>
+    </div>
+
+    
+    <div class="table-container">
+        <table id="deviceInfoTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Device Name</th>
+                    <th>Device Action</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" onchange="changePageSize()">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <button onclick="prevPage()">Previous</button>
+        <span id="page-info"></span>
+        <button onclick="nextPage()">Next</button>
+    </div>
+    
+
+    <script src="paginationHistory.js"></script>
+</body>
+</html>

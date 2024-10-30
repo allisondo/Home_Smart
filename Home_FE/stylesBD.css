@@ -1,0 +1,205 @@
+/* Đặt font mặc định và màu nền */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Đầu trang với gradient đẹp */
+.header {
+    background: linear-gradient(to bottom, #ff5e99, #ffb3cc);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.tabs {
+    margin-top: 10px;
+}
+
+.tabs a {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.tabs a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Phần tìm kiếm */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+}
+
+.search-container label {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+#searchOption,
+#searchValue {
+    padding: 10px 15px;
+    margin: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#searchOption:focus,
+#searchValue:focus {
+    border-color: #ff66b2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+button {
+    background-color: #ff66b2;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 15px;
+}
+
+button:hover {
+    background-color: #e0459e;
+    transform: translateY(-2px);
+}
+
+button:active {
+    background-color: #d03d8e;
+    transform: translateY(0px);
+}
+
+/* Phần bảng dữ liệu */
+.table-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    max-width: 900px;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    font-size: 16px;
+    background-color: #ff66b2;
+    color: white;
+    text-transform: uppercase;
+}
+
+td {
+    font-size: 14px;
+}
+
+#dataTable td:last-child {
+    width: 180px;
+    white-space: nowrap;
+}
+
+/* Phần phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+.pagination button {
+    background-color: #ff66b2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.pagination button:hover {
+    background-color: #f81e8b;
+}
+
+.pagination span {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    font-size: 16px;
+    color: #ff66b2;
+}
+
+/* Styling for page size select dropdown */
+.pagination label {
+    font-size: 16px;
+    color: #333;
+    margin-right: 10px;
+}
+
+#pageSize {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    cursor: pointer;
+}
+
+#pageSize:focus {
+    border-color: #ff66b2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
