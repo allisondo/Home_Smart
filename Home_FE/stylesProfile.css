@@ -54,8 +54,8 @@ body {
 }
 
 .avatar img {
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
     border: 3px solid #ff66b2;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
