@@ -134,6 +134,14 @@ th {
     background-color: #ff66b2;
     color: white;
     text-transform: uppercase;
+    cursor: pointer;
+}
+
+th span {
+    font-size: 0.8em;
+    margin-left: 5px;
+    color: #ffffff;
+    font-weight: normal;
 }
 
 td {

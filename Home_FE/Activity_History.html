@@ -17,20 +17,32 @@
     </div>
 
 
-    <div class="search-container">
+    <!-- <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search by device name or time">
         <button onclick="performSearch()">Search</button>
+    </div> -->
+    <div class="search-container">
+        <label for="searchOption">Tìm kiếm theo:</label>
+        <select id="searchOption">
+            <!-- Các lựa chọn tìm kiếm sẽ được thêm từ JavaScript -->
+        </select>
+        <label for="searchValue">Nhập giá trị:</label>
+        <input type="text" id="searchValue" placeholder="Enter search value">
+        <button onclick="performSearch()">Tìm kiếm</button>
     </div>
-
     
     <div class="table-container">
-        <table id="deviceInfoTable">
+        <table id="dataTable">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th>
                     <th>Device Name</th>
                     <th>Device Action</th>
-                    <th>Time</th>
+                    <th>Time</th> -->
+                    <th onclick="sortTable('id')">ID <span id="sortIcon-id">⇅</span></th>
+                    <th onclick="sortTable('device_name')">Device Name <span id="sortIcon-temperature">⇅</span></th>
+                    <th onclick="sortTable('action')">Device Action <span id="sortIcon-humidity">⇅</span></th>
+                    <th onclick="sortTable('time')">Time <span id="sortIcon-time">⇅</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -42,8 +54,9 @@
     <div class="pagination">
         <label for="pageSize">Page Size:</label>
         <select id="pageSize" onchange="changePageSize()">
-            <option value="5">5</option>
-            <option value="10">10</option>
+            <option value="5" >5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
             <option value="20">20</option>
         </select>
         <button onclick="prevPage()">Previous</button>

@@ -1,120 +1,180 @@
 let currentPage = 1;
-let rowsPerPage = 5; // Default to 5 rows per page
-let tableData = []; // This will store all the data fetched from the backend
+let rowsPerPage = 10; // Số hàng mặc định mỗi trang
+let deviceData = []; // Biến toàn cục để lưu trữ dữ liệu cảm biến từ API
+let sortField = 'time'; // Mặc định sắp xếp theo thời gian
+let sortOrder = 'DESC'; // Mặc định là giảm dần
+let totalPages = 1; // Tổng số trang từ API
+let searchValue = ''; // Lưu trữ giá trị tìm kiếm của người dùng
+let searchField = 'all'; // Trường tìm kiếm mặc định
 
-const table = document.getElementById('deviceInfoTable');
-const tbody = table.getElementsByTagName('tbody')[0];
 
-// Function to format date in 'DD/MM/YYYY HH:MM:SS' format
+// Hàm sắp xếp cột theo dữ liệu tìm kiếm hiện tại
+function sortTable(field) {
+    if (sortField === field) {
+        // Đổi thứ tự sắp xếp nếu nhấn cùng cột
+        sortOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC';
+    } else {
+        // Nếu là cột khác, đặt cột mới và sắp xếp theo tăng dần
+        sortField = field;
+        sortOrder = 'ASC';
+    }
 
-function formatDate(date) {
-    const d = new Date(date);
+    updateSortIcons();
+    sortDeviceData();
+    displayFilteredTable(deviceData, 'all'); // Hiển thị lại dữ liệu đã sắp xếp
+}
+// Hàm sắp xếp dữ liệu trong mảng `deviceData`
 
-    // Extract year, month, day, hours, minutes, and seconds
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const day = String(d.getDate()).padStart(2, '0');
-    const hours = String(d.getHours()).padStart(2, '0');
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const seconds = String(d.getSeconds()).padStart(2, '0');
+function sortDeviceData() {
+    deviceData.sort((a, b) => {
+        let valueA = a[sortField];
+        let valueB = b[sortField];
 
-    // Format the date as 'YYYY-MM-DD HH:MM:SS'
+        // Nếu là cột thời gian, chuyển thành giá trị thời gian để sắp xếp
+        if (sortField === 'time') {
+            valueA = new Date(valueA);
+            valueB = new Date(valueB);
+        }
+
+        if (sortOrder === 'ASC') {
+            return valueA > valueB ? 1 : -1;
+        } else {
+            return valueA < valueB ? 1 : -1;
+        }
+    });
+}
+// Hàm cập nhật biểu tượng sắp xếp cho mỗi cột
+function updateSortIcons() {
+    const fields = ['id', 'device_name', 'action', 'time'];
+    fields.forEach(field => {
+        const icon = document.getElementById(`sortIcon-${field}`);
+        if (icon) {
+            if (field === sortField) {
+                icon.textContent = sortOrder === 'ASC' ? '▲' : '▼';
+            } else {
+                icon.textContent = '⇅'; // Biểu tượng mặc định khi không sắp xếp
+            }
+        }
+    });
+}
+async function fetchDeviceHistory() {
+    try {
+        let url = `http://localhost:5000/api/activity-history?page=${currentPage}&pageSize=${rowsPerPage}`;
+        // Nếu có tìm kiếm, thêm search và field vào URL
+        if (searchValue.trim() !== '') {
+            url += `&field=${searchField}&search=${encodeURIComponent(searchValue)}`;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+        deviceData = data.data || [];
+        totalPages = data.pagination ? data.pagination.totalPages : 1;
+
+        displayFilteredTable(deviceData);
+        document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu cảm biến:', error);
+    }
+}
+
+// Function to populate the table based on the current page and search filter
+function displayFilteredTable(data) {
+    const dataTableBody = document.querySelector('#dataTable tbody');
+    dataTableBody.innerHTML = ''; // Xóa dữ liệu cũ
+
+    data.forEach((rowData, index) => {
+        const row = `
+        <tr>
+            <td>${rowData.id || i + 1}</td>
+            <td>${rowData.device_name || 'N/A'}</td> 
+            <td>${rowData.action || 'N/A'}</td> 
+            <td>${formatDateTime(rowData.time)}</td>
+        </tr>
+        `;
+        dataTableBody.insertAdjacentHTML('beforeend', row);
+    });
+
+
+    document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+}
+
+// Cập nhật lựa chọn trong ô tìm kiếm
+document.addEventListener('DOMContentLoaded', () => {
+    fetchDeviceHistory();
+
+    // Cập nhật các lựa chọn trong ô select cho phần tìm kiếm
+    const searchOption = document.getElementById('searchOption');
+    searchOption.innerHTML = `
+        <option value="all">ALL</option>
+        <option value="time">Thời gian</option>
+    `;
+});
+
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 
-// Function to fetch device status from the backend
-async function fetchDeviceStatus() {
-    try {
-        const response = await fetch('http://localhost:5000/api/activity-history');
+function performSearch() {
+    searchField = document.getElementById('searchOption').value || 'all';
+    searchValue = document.getElementById('searchValue').value.trim();
+    currentPage = 1; // Đặt lại trang đầu tiên khi tìm kiếm mới
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log('Fetched Data:', data); // Thêm dòng này để log dữ liệu vào console
-        tableData = data; // Store the fetched data
-        populateTable();  // Populate the table with fetched data
-    } catch (error) {
-        console.error('Error fetching device status:', error);
-    }
+    fetchDeviceHistory(); // Gọi lại API để cập nhật kết quả tìm kiếm
 }
 
+// Thêm lựa chọn vào menu tìm kiếm
+document.addEventListener('DOMContentLoaded', () => {
+    fetchDeviceHistory();
 
-// Function to populate the table based on the current page and search filter
-// Function to populate the table based on the current page and search filter
-function populateTable() {
-    tbody.innerHTML = ''; // Clear the table before populating
+    // Cập nhật các lựa chọn trong ô select cho phần tìm kiếm
+    const searchOption = document.getElementById('searchOption');
+    searchOption.innerHTML = `
+        <option value="all">ALL</option>
+        <option value="time">Thời gian</option>
+    `;
+});
 
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = tableData.filter(item => {
-        const deviceName = item.device_name ? item.device_name.toLowerCase() : ''; // Sử dụng device_name thay vì deviceName
-        const formattedDate = item.time ? formatDate(item.time) : '';  // Sử dụng time thay vì timestamp
-
-        return deviceName.includes(searchTerm) || formattedDate.includes(searchTerm);
-    });
-
-    const totalRows = filteredData.length;
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const pageData = filteredData.slice(start, end);
-
-    pageData.forEach((device, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${start + index + 1}</td>
-            <td>${device.device_name || 'N/A'}</td>  <!-- Sử dụng device_name -->
-            <td>${device.action || 'N/A'}</td>  <!-- Sử dụng action -->
-            <td>${device.time ? formatDate(device.time) : 'N/A'}</td> <!-- Sử dụng time -->
-        `;
-        tbody.appendChild(row);
-    });
-
-    // Update page info
-    document.getElementById('page-info').innerText = `Page ${currentPage} of ${Math.ceil(totalRows / rowsPerPage)}`;
+// Hàm xóa điều kiện tìm kiếm
+function clearSearch() {
+    document.getElementById('searchOption').value = 'all';
+    document.getElementById('searchValue').value = ''; // Xóa giá trị tìm kiếm
+    fetchDeviceHistory(); // Tải lại dữ liệu từ API để xóa bộ lọc tìm kiếm
 }
 
+// Gọi hàm để lấy dữ liệu khi trang được tải
+document.addEventListener('DOMContentLoaded', fetchDeviceHistory);
 
-
-// Pagination controls
+// Hàm chuyển trang trước
 function prevPage() {
     if (currentPage > 1) {
-        currentPage--; // Giảm số trang hiện tại
-        populateTable(); // Cập nhật lại bảng
+        currentPage--;
+        fetchDeviceHistory(); // Gọi lại API để cập nhật dữ liệu
     }
 }
 
+// Hàm chuyển trang sau
 function nextPage() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = tableData.filter(item => {
-        const deviceName = item.device_name ? item.device_name.toLowerCase() : '';
-        const formattedDate = item.time ? formatDate(item.time) : '';
-
-        return deviceName.includes(searchTerm) || formattedDate.includes(searchTerm);
-    });
-
-    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
     if (currentPage < totalPages) {
-        currentPage++; // Tăng số trang hiện tại
-        populateTable(); // Cập nhật lại bảng
+        currentPage++;
+        fetchDeviceHistory(); // Gọi lại API để cập nhật dữ liệu
+    } else {
+        console.log("Không thể sang trang tiếp theo vì đây là trang cuối cùng.");
     }
 }
 
-
-// Function to change the page size
+// Hàm thay đổi số hàng mỗi trang và cập nhật lại hiển thị
 function changePageSize() {
     const pageSizeSelect = document.getElementById('pageSize');
-    rowsPerPage = parseInt(pageSizeSelect.value); // Update the rows per page
-    currentPage = 1; // Reset to the first page
-    populateTable(); // Refresh the table with the new page size
+    rowsPerPage = parseInt(pageSizeSelect.value); // Cập nhật số hàng mỗi trang
+    currentPage = 1; // Đặt lại trang về trang đầu tiên
+    fetchDeviceHistory();
 }
-
-// Function to handle the search
-function performSearch() {
-    currentPage = 1; // Reset to the first page when performing a search
-    populateTable(); // Show the filtered results
-}
-
-// Initialize by fetching data from the backend
-fetchDeviceStatus();

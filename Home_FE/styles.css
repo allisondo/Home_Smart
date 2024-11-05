@@ -1,322 +1,280 @@
 body {
-    /* font-family: Arial, sans-serif; */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffe6f2;
+    background-color: #f7f7f7;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
+#datetime {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Đầu trang với gradient đẹp */
+.header {
+    background: linear-gradient(to bottom, #ff5e99, #ffb3cc); /* Gradient màu hồng */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
 .header h1 {
     margin: 0;
     font-size: 32px;
     font-weight: bold;
+    text-transform: uppercase; /* Viết hoa tiêu đề */
+    letter-spacing: 2px; /* Thêm khoảng cách giữa các chữ */
+}
+
+.tabs {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Khoảng cách giữa các tab */
+}
+
+.tabs a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase; /* Viết hoa văn bản trong các tab */
+}
+
+.tabs a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
 }
 
 .room-status {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .room-status .status-item {
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    margin: 8px;
-
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  margin: 8px;
 }
 
 /* Màu sắc tông nude nhẹ nhàng cho mỗi ô */
 .status-item.temperature {
-    background-color: #fcad9a;
-    /* Tông màu nude nhạt cho nhiệt độ */
-    color: #df5938;
-    /* Màu chữ cho nhiệt độ */
+  background-color: #fcad9a;
+  /* Tông màu nude nhạt cho nhiệt độ */
+  color: #df5938;
+  /* Màu chữ cho nhiệt độ */
 }
 
 .status-item.humidity {
-    background-color: #bedde7;
-    /* Tông màu nude nhẹ nhàng cho độ ẩm */
-    color: #2e88a7;
-    /* Màu chữ cho độ ẩm */
+  background-color: #bedde7;
+  /* Tông màu nude nhẹ nhàng cho độ ẩm */
+  color: #2e88a7;
+  /* Màu chữ cho độ ẩm */
 }
 
 .status-item.light {
-    background-color: #f5d697;
-    /* Tông màu nude nhạt cho ánh sáng */
-    color: #a1710f;
-    /* Màu chữ cho ánh sáng */
+  background-color: #f5d697;
+  /* Tông màu nude nhạt cho ánh sáng */
+  color: #a1710f;
+  /* Màu chữ cho ánh sáng */
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .room-status {
-        flex-direction: column;
-    }
-}
-
-
-
-
-
-.header,
-.pagination button,
-.nav-link {
-    background: radial-gradient(circle at center, #ffb3cc, #ff5e99);
-    /* Màu nhạt (#ffb3cc) ở giữa và đậm dần ra ngoài (#ff5e99) */
-    color: white;
-    border-radius: 8px;
-}
-
-
-.header {
-    padding: 10px 0;
-    text-align: center;
-}
-
-
-.nav-link:hover {
-    background-color: #ff6fb7;
-    color: white;
+  .room-status {
+    flex-direction: column;
+  }
 }
 
 
 .container {
-    margin-top: 20px;
+  margin-top: 20px;
 }
-
 
 .card {
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 .card-title {
-    font-size: 24px;
-    font-weight: bold;
+  font-size: 24px;
+  font-weight: bold;
 }
-
 
 .card-body {
-    padding: 20px;
+  padding: 20px;
 }
 
-
-.datetime {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-
-/* on/of */
 
 .btn {
-    font-size: 16px;
-    padding: 8px 16px;
+  font-size: 16px;
+  padding: 8px 16px;
 }
 
 .btn-success {
-    background-color: #e73030;
-    /* Dark red for inactive state */
-    border: none;
+  background-color: #e73030;
+  /* Dark red for inactive state */
+  border: none;
 }
-
-/* .btn-success:focus,
-.btn-success:active {
-    background-color: #F783AC;
-    /* Light red for active state */
-/* box-shadow: none; */
-
-/* }
-/* */
-/* .btn-danger { */
-/* background-color: #1d0e0e;
-    /* Dark red for inactive state */
-/* border: none;
-} */
 
 .btn-success:hover,
 .btn-success:hover {
-    background-color: #cf3441;
-    opacity: 0.8;
+  background-color: #cf3441;
+  opacity: 0.8;
 }
 
 .btn-danger:hover,
 .btn-danger:hover {
-    background-color: #cf3441;
-    opacity: 0.8;
+  background-color: #cf3441;
+  opacity: 0.8;
 }
 
 .btn-on-active {
-    background-color: #1da824;
-    /* Light red for ON active state */
+  background-color: #1da824;
+  /* Light red for ON active state */
 }
 
-
 .btn-off-active {
-    background-color: #1da824;
-    /* Light red for OFF active state */
+  background-color: #1da824;
+  /* Light red for OFF active state */
 }
 
 .btn-on-active:hover {
-    background-color: #4cc452;
-    /* Light red for ON active state */
+  background-color: #4cc452;
+  /* Light red for ON active state */
 }
-
 
 .btn-off-active:hover {
-    background-color: #4cc452;
-    /* Light red for OFF active state */
+  background-color: #4cc452;
+  /* Light red for OFF active state */
 }
-
 
 .text-center {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-
-/* Hiệu ứng màu chuyển từ đậm đến nhạt cho phần header */
-.bg-pink {
-    background: linear-gradient(to bottom, #f5367c, #fa7aa5);
-    /* Màu đậm ở trên (#ff5e99) và nhạt dần xuống (#ffb3cc) */
-    color: white;
-}
-
-/* Hiệu ứng màu chuyển từ đậm đến nhạt từ dưới lên */
-.bg-pink1 {
-    background: linear-gradient(to top, #ff5e99, #fa7aa5);
-    /* Màu đậm ở dưới (#ff5e99) và nhạt dần lên trên (#ffb3cc) */
-    color: white;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 
 
 #datetime {
-    font-size: 16px;
-    font-weight: bold;
+  font-size: 16px;
+  font-weight: bold;
 }
 
-
-#timezone {
-    font-size: 14px;
-    color: #fff;
-}
 
 
 .icon-cold {
-    color: rgb(99, 196, 235);
-    /* Blue for cold temperatures */
+  color: rgb(99, 196, 235);
+  /* Blue for cold temperatures */
 }
-
 
 .icon-cool {
-    color: rgb(25, 70, 153);
-    /* Cyan for cool temperatures */
+  color: rgb(25, 70, 153);
+  /* Cyan for cool temperatures */
 }
-
 
 .icon-warm {
-    color: rgb(207, 121, 22);
-    /* Green for warm temperatures */
+  color: rgb(207, 121, 22);
+  /* Green for warm temperatures */
 }
-
 
 .icon-hot {
-    color: rgb(199, 33, 21);
-    /* Orange for hot temperatures */
+  color: rgb(199, 33, 21);
+  /* Orange for hot temperatures */
 }
-
 
 .icon-extreme {
-    color: rgb(114, 17, 17);
-    /* Red for extreme temperatures */
+  color: rgb(114, 17, 17);
+  /* Red for extreme temperatures */
 }
 
-
-
 .icon-low-humidity {
-    color: #4ac8f1;
-    /* Light blue for low humidity */
+  color: #4ac8f1;
+  /* Light blue for low humidity */
 }
 
 .icon-moderate-humidity {
-    color: #5649cf;
-    /* Green for moderate humidity */
+  color: #5649cf;
+  /* Green for moderate humidity */
 }
 
 .icon-high-humidity {
-    color: #0c0549;
-    /* Steel blue for high humidity */
+  color: #0c0549;
+  /* Steel blue for high humidity */
 }
 
 .icon-low-light {
-    color: #b2bb2f;
-    /* Yellow for low light */
+  color: #b2bb2f;
+  /* Yellow for low light */
 }
 
 .icon-moderate-light {
-    color: #b9970f;
-    /* Orange for moderate light */
+  color: #b9970f;
+  /* Orange for moderate light */
 }
 
 .icon-high-light {
-    color: #ff0000;
-    /* Red for high light */
+  color: #ff0000;
+  /* Red for high light */
 }
 
 /* Fan icon spinning animation */
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
 
-    100% {
-        transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .fan-spin {
-    animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
 }
 
 .fan-active {
-    color: #ff5722;
-    /* Darker color when active */
+  color: #15a71c;
+  /* Darker color when active */
 }
-
 
 /* Light icon on state */
 .light-on {
-    color: #ffff00;
-    /* Bright color when the light is on */
-    text-shadow: 0 0 10px rgba(255, 255, 0, 0.6);
-    /* Glowing effect */
+  color: #ffff00;
+  /* Bright color when the light is on */
+  text-shadow: 0 0 10px rgba(255, 255, 0, 0.6);
+  /* Glowing effect */
 }
-
 
 /* Air Conditioner icon blowing effect */
 .ac-blow {
-    animation: blow 1s infinite;
+  animation: blow 1s infinite;
 }
 
 /* Animation keyframes for blowing effect */
 @keyframes blow {
-    0% {
-        text-shadow: 0 0 5px rgba(0, 0, 255, 0.4), 0 0 10px rgba(0, 0, 255, 0.4);
-    }
+  0% {
+    text-shadow: 0 0 5px rgba(0, 0, 255, 0.4), 0 0 10px rgba(0, 0, 255, 0.4);
+  }
 
-    50% {
-        text-shadow: 0 0 10px rgba(0, 0, 255, 0.6), 0 0 20px rgba(0, 0, 255, 0.6);
-    }
+  50% {
+    text-shadow: 0 0 10px rgba(0, 0, 255, 0.6), 0 0 20px rgba(0, 0, 255, 0.6);
+  }
 
-    100% {
-        text-shadow: 0 0 5px rgba(0, 0, 255, 0.4), 0 0 10px rgba(0, 0, 255, 0.4);
-    }
+  100% {
+    text-shadow: 0 0 5px rgba(0, 0, 255, 0.4), 0 0 10px rgba(0, 0, 255, 0.4);
+  }
 }

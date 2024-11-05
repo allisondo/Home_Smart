@@ -1,21 +1,82 @@
 let currentPage = 1;
 let rowsPerPage = 5; // Số hàng mặc định mỗi trang
 let sensorData = []; // Biến toàn cục để lưu trữ dữ liệu cảm biến từ API
+let sortField = 'time'; // Mặc định sắp xếp theo thời gian
+let sortOrder = 'DESC'; // Mặc định là giảm dần
+let totalPages = 1; // Tổng số trang từ API
+let searchValue = ''; // Lưu trữ giá trị tìm kiếm của người dùng
+let searchField = 'all'; // Trường tìm kiếm mặc định
 
-// Hàm để lấy dữ liệu từ API và hiển thị lên bảng
+
+// Hàm sắp xếp cột theo dữ liệu tìm kiếm hiện tại
+function sortTable(field) {
+    if (sortField === field) {
+        // Đổi thứ tự sắp xếp nếu nhấn cùng cột
+        sortOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC';
+    } else {
+        // Nếu là cột khác, đặt cột mới và sắp xếp theo tăng dần
+        sortField = field;
+        sortOrder = 'ASC';
+    }
+
+    updateSortIcons();
+    sortSensorData();
+    displayFilteredTable(sensorData, 'all'); // Hiển thị lại dữ liệu đã sắp xếp
+}
+
+// Hàm sắp xếp dữ liệu trong mảng `sensorData`
+function sortSensorData() {
+    sensorData.sort((a, b) => {
+        let valueA = a[sortField];
+        let valueB = b[sortField];
+
+        // Nếu là cột thời gian, chuyển thành giá trị thời gian để sắp xếp
+        if (sortField === 'time') {
+            valueA = new Date(valueA);
+            valueB = new Date(valueB);
+        }
+
+        if (sortOrder === 'ASC') {
+            return valueA > valueB ? 1 : -1;
+        } else {
+            return valueA < valueB ? 1 : -1;
+        }
+    });
+}
+
+// Hàm cập nhật biểu tượng sắp xếp cho mỗi cột
+function updateSortIcons() {
+    const fields = ['id', 'temperature', 'humidity', 'light', 'time'];
+    fields.forEach(field => {
+        const icon = document.getElementById(`sortIcon-${field}`);
+        if (icon) {
+            if (field === sortField) {
+                icon.textContent = sortOrder === 'ASC' ? '▲' : '▼';
+            } else {
+                icon.textContent = '⇅'; // Biểu tượng mặc định khi không sắp xếp
+            }
+        }
+    });
+}
+
+
+// Hàm lấy dữ liệu từ backend
 async function fetchSensorData() {
+    let url = `http://localhost:5000/api/sensors?page=${currentPage}&pageSize=${rowsPerPage}&sortField=${sortField}&sortOrder=${sortOrder}`;
+
+    // Nếu có tìm kiếm, thêm search và field vào URL
+    if (searchValue.trim() !== '') {
+        url += `&field=${searchField}&search=${encodeURIComponent(searchValue)}`;
+    }
+
     try {
-        //  const response = await fetch(`http://localhost:5000/api/sensors?pageSize=${rowsPerPage}&currentPage=${currentPage}`);
-        const response = await fetch(`http://localhost:5000/api/sensors?`);
-        const data = await response.json(); // Lưu trữ dữ liệu cảm biến
+        const response = await fetch(url);
+        const data = await response.json();
+        sensorData = data.data || [];
+        totalPages = data.pagination ? data.pagination.totalPages : 1;
 
-        // Kiểm tra xem dữ liệu có đúng cấu trúc không
-        console.log('Dữ liệu từ API:', data);
-
-        // Nếu cấu trúc không phải là data.data, ta có thể sửa thành data trực tiếp
-        sensorData = data.data || data; // Đảm bảo rằng lấy đúng dữ liệu từ API
-
-        displayFilteredTable(sensorData, 'all'); // Hiển thị dữ liệu với phân trang
+        displayFilteredTable(sensorData);
+        document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
     } catch (error) {
         console.error('Lỗi khi lấy dữ liệu cảm biến:', error);
     }
@@ -23,88 +84,84 @@ async function fetchSensorData() {
 
 
 
-// Hàm hiển thị bảng với dữ liệu đã phân trang và lọc
-function displayFilteredTable(data, option) {
+// Hàm hiển thị tất cả các cột dữ liệu của dòng tìm thấy
+function displayFilteredTable(data) {
     const dataTableBody = document.querySelector('#dataTable tbody');
     dataTableBody.innerHTML = ''; // Xóa dữ liệu cũ
 
-    // Cập nhật tiêu đề bảng (header) dựa trên lựa chọn của người dùng
-    let headers = '<th>ID</th><th>Time</th>';
-    if (option === 'temperature' || option === 'all') headers += '<th>Temperature (°C)</th>';
-    if (option === 'humidity' || option === 'all') headers += '<th>Humidity (%)</th>';
-    if (option === 'light' || option === 'all') headers += '<th>Light (Lumens)</th>';
-
-    document.querySelector('#dataTable thead tr').innerHTML = headers; // Cập nhật tiêu đề bảng
-
-    // Tính toán phân trang
-    const totalRows = data.length;
-    const totalPages = Math.ceil(totalRows / rowsPerPage);
-
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    // Hiển thị dữ liệu theo phân trang
-    for (let i = start; i < end && i < totalRows; i++) {
-        let row = `<tr><td>${i + 1}</td><td>${new Date(data[i].time).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour12: false })}</td>`;
-        if (option === 'temperature' || option === 'all') row += `<td>${data[i].temperature ? `${data[i].temperature} °C` : 'N/A'}</td>`;
-        if (option === 'humidity' || option === 'all') row += `<td>${data[i].humidity ? `${data[i].humidity} %` : 'N/A'}</td>`;
-        if (option === 'light' || option === 'all') row += `<td>${data[i].light ? `${data[i].light} Lumens` : 'N/A'}</td>`;
-        row += `</tr>`;
-
+    data.forEach((rowData, index) => {
+        const row = `
+            <tr>
+                <td>${rowData.id}</td>
+                <td>${rowData.temperature ? `${rowData.temperature} °C` : 'N/A'}</td>
+                <td>${rowData.humidity ? `${rowData.humidity} %` : 'N/A'}</td>
+                <td>${rowData.light ? `${rowData.light} Lumens` : 'N/A'}</td>
+                <td>${formatDateTime(rowData.time)}</td>
+            </tr>
+        `;
         dataTableBody.insertAdjacentHTML('beforeend', row);
-    }
+    });
 
-    // Cập nhật thông tin phân trang
     document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
 }
 
 
-function formatDateTime(input) {
-    // Tách chuỗi thành giờ và ngày
-    const [time, date] = input.split(' ');
-    const [day, month, year] = date.split('/');
-    // Trả về định dạng ISO: YYYY-MM-DDTHH:MM:SS
-    return `${year}-${month}-${day}T${time}`;
+// Cập nhật lựa chọn trong ô tìm kiếm
+document.addEventListener('DOMContentLoaded', () => {
+    fetchSensorData();
+
+    // Cập nhật các lựa chọn trong ô select cho phần tìm kiếm
+    const searchOption = document.getElementById('searchOption');
+    searchOption.innerHTML = `
+        <option value="all">ALL</option>
+        <option value="id">ID</option>
+        <option value="temperature">Nhiệt độ</option>
+        <option value="humidity">Độ ẩm</option>
+        <option value="light">Ánh sáng</option>
+        <option value="time">Thời gian</option>
+    `;
+});
+
+
+
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 
-// Hàm để thực hiện tìm kiếm dựa trên trường đã chọn và thời gian cụ thể
-async function performSearch() {
-    const option = document.getElementById('searchOption').value || 'all'; // Mặc định là 'all' nếu không chọn
-    const searchValue = document.getElementById('searchValue').value; // Lấy thời gian cụ thể từ ô text
+// Hàm xử lý khi nhấn nút tìm kiếm
+function performSearch() {
+    searchField = document.getElementById('searchOption').value || 'all';
+    searchValue = document.getElementById('searchValue').value.trim();
+    currentPage = 1; // Đặt lại trang đầu tiên khi tìm kiếm mới
 
-    // Kiểm tra xem searchValue có hợp lệ hay không trước khi chuyển đổi
-    let url = `http://localhost:5000/api/sensors?`;
-
-    // Nếu người dùng không chọn trường dữ liệu, mặc định sẽ là 'all'
-    if (option === 'all' || !option) {
-        url += 'field=all&'; // Mặc định là 'all' nếu không chọn
-    } else {
-        url += `field=${option}&`;
-    }
-
-    // Nếu người dùng có nhập thời gian, thêm thời gian vào URL
-    if (searchValue) {
-        const formattedTime = formatDateTime(searchValue); // Chuyển thời gian sang ISO
-        url += `time=${encodeURIComponent(formattedTime)}&`;
-    }
-
-    console.log('Search URL:', url); // Kiểm tra URL gửi đi
-
-    try {
-        const response = await fetch(url); // Gửi request với tham số
-        const data = await response.json(); // Nhận dữ liệu từ API
-
-        // Kiểm tra cấu trúc trả về từ API
-        console.log('Dữ liệu tìm kiếm:', data);
-
-        sensorData = data.data || data; // Cập nhật biến toàn cục, đảm bảo nhận đúng dữ liệu
-        displayFilteredTable(sensorData, option); // Hiển thị dữ liệu lọc theo yêu cầu
-    } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu từ API:', error);
-    }
+    fetchSensorData(); // Gọi lại API để cập nhật kết quả tìm kiếm
 }
 
+
+// Thêm lựa chọn vào menu tìm kiếm
+document.addEventListener('DOMContentLoaded', () => {
+    fetchSensorData();
+
+    // Cập nhật các lựa chọn trong ô select cho phần tìm kiếm
+    const searchOption = document.getElementById('searchOption');
+    searchOption.innerHTML = `
+        <option value="all">ALL</option>
+        <option value="ID">ID</option>
+        <option value="temperature">Nhiệt độ</option>
+        <option value="humidity">Độ ẩm</option>
+        <option value="light">Ánh sáng</option>
+        <option value="time">Thời gian</option>
+    `;
+});
 
 // Hàm xóa điều kiện tìm kiếm
 function clearSearch() {
@@ -113,25 +170,28 @@ function clearSearch() {
     fetchSensorData(); // Tải lại dữ liệu từ API để xóa bộ lọc tìm kiếm
 }
 
+
 // Gọi hàm để lấy dữ liệu khi trang được tải
 document.addEventListener('DOMContentLoaded', fetchSensorData);
 
-// Hàm chuyển trang trước
+// Hàm chuyển sang trang trước
 function prevPage() {
     if (currentPage > 1) {
         currentPage--;
-        displayFilteredTable(sensorData, document.getElementById('searchOption').value);
+        fetchSensorData(); // Gọi lại API để cập nhật dữ liệu
     }
 }
 
 // Hàm chuyển trang sau
 function nextPage() {
-    const totalRows = sensorData.length;
-    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    // const totalRows = sensorData.length;
+    // const totalPages = Math.ceil(totalRows / rowsPerPage);
 
     if (currentPage < totalPages) {
         currentPage++;
-        displayFilteredTable(sensorData, document.getElementById('searchOption').value);
+        fetchSensorData(); // Gọi lại API để cập nhật dữ liệu
+    } else {
+        console.log("Không thể sang trang tiếp theo vì đây là trang cuối cùng.");
     }
 }
 
@@ -140,5 +200,8 @@ function changePageSize() {
     const pageSizeSelect = document.getElementById('pageSize');
     rowsPerPage = parseInt(pageSizeSelect.value); // Cập nhật số hàng mỗi trang
     currentPage = 1; // Đặt lại trang về trang đầu tiên
-    displayFilteredTable(sensorData, document.getElementById('searchOption').value); // Làm mới bảng với kích thước trang mới
+    fetchSensorData(); // Gọi lại API để làm mới bảng với kích thước trang mới
 }
+
+
+

@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "dc07093a-42d9-4a6e-8939-aecbbd3c17b8",
+		"name": "API docs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "39312527"
+	},
+	"item": [
+		{
+			"name": "http://localhost:5000/api/activity-history?pageSize=10&currentPage=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/sensors?page=1&pageSize=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"sensors"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5000/api/control/light",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:5000/api/control/light"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5000/api/control/fan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:5000/api/control/fan"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5000/api/control/conditioner",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:5000/api/control/conditioner"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5000/api/device-status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:5000/api/device-status"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5000/api/sensors?page=1&pageSize=5&sortField=time&sortOrder=DESC&field=temperature&search=25\n",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/sensors?page=1&pageSize=5&sortField=time&sortOrder=DESC&field=temperature&search=25\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"sensors"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "sortField",
+							"value": "time"
+						},
+						{
+							"key": "sortOrder",
+							"value": "DESC"
+						},
+						{
+							"key": "field",
+							"value": "temperature"
+						},
+						{
+							"key": "search",
+							"value": "25\n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5000/api/activity-history",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:5000/api/activity-history"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:5000/api/activity-history?page=1&pageSize=10&sortField=time&sortOrder=DESC&field=device_name&search=Light",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/activity-history?page=1&pageSize=10&sortField=time&sortOrder=DESC&field=device_name&search=Light",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"activity-history"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						},
+						{
+							"key": "sortField",
+							"value": "time"
+						},
+						{
+							"key": "sortOrder",
+							"value": "DESC"
+						},
+						{
+							"key": "field",
+							"value": "device_name"
+						},
+						{
+							"key": "search",
+							"value": "Light"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

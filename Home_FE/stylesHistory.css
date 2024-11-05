@@ -46,37 +46,39 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    /* Điều chỉnh độ rộng tối đa */
-    border: 1px solid #f0f0f0;
+    max-width: 900px;
 }
 
-#searchInput {
-    padding: 12px 20px;
-    /* Tăng kích thước padding */
+.search-container label {
+    margin-right: 10px;
     font-size: 16px;
-    /* Tăng kích thước chữ */
+    color: #333;
+    font-weight: bold;
+}
+
+#searchOption,
+#searchValue {
+    padding: 10px 15px;
+    margin: 10px 15px;
+    font-size: 16px;
     border: 1px solid #ddd;
-    border-radius: 30px;
-    /* Bo tròn khung tìm kiếm */
+    border-radius: 8px;
     outline: none;
     transition: border-color 0.3s, box-shadow 0.3s;
-    width: 400px;
-    /* Đặt chiều rộng cho ô input */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    /* Đổ bóng nhẹ */
-    background-color: white;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-#searchInput:focus {
+#searchOption:focus,
+#searchValue:focus {
     border-color: #ff66b2;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    /* Đổ bóng mạnh hơn khi focus */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 button {
@@ -84,24 +86,22 @@ button {
     color: white;
     border: none;
     padding: 12px 25px;
-    /* Tăng kích thước padding cho nút */
-    margin-left: 10px;
     cursor: pointer;
-    border-radius: 30px;
-    /* Bo tròn nút */
+    border-radius: 8px;
     font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 15px;
 }
 
 button:hover {
-    background-color: #e475ac;
-    transform: scale(1.05);
-    /* Tăng kích thước nhẹ khi hover */
+    background-color: #e0459e;
+    transform: translateY(-2px);
 }
 
-button:focus {
-    outline: none;
+button:active {
+    background-color: #d03d8e;
+    transform: translateY(0px);
 }
 
 /* Phần bảng dữ liệu */
@@ -134,6 +134,14 @@ th {
     background-color: #ff66b2;
     color: white;
     text-transform: uppercase;
+    cursor: pointer;
+}
+
+th span {
+    font-size: 0.8em;
+    margin-left: 5px;
+    color: #ffffff;
+    font-weight: normal;
 }
 
 td {

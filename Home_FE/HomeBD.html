@@ -16,20 +16,14 @@
         </div>
     </div>
 
-    <div class="search-container">
-        <label for="searchOption"> Filter:</label>
+     <div class="search-container">
+        <label for="searchOption">Tìm kiếm theo:</label>
         <select id="searchOption">
-            <option value="all">ALL</option>
-            <option value="temperature">Temperature</option>
-            <option value="humidity">Humidity</option>
-            <option value="light">Light</option>
+            <!-- Các lựa chọn tìm kiếm sẽ được thêm từ JavaScript -->
         </select>
-    
-   
-     
-     <label for="searchValue">Tìm kiếm:</label> <!-- nhập text thời gian để tìm kiếm-->
-     <input type="text" id="searchValue" placeholder="Enter value to search">
-        <button onclick="performSearch()">Search</button>
+        <label for="searchValue">Nhập giá trị:</label>
+        <input type="text" id="searchValue" placeholder="Enter search value">
+        <button onclick="performSearch()">Tìm kiếm</button>
     </div>
     
    
@@ -37,13 +31,17 @@
         <table id="dataTable">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Temperature (°C)</th>
-                    <th>Humidity (%)</th>
-                    <th>Light (Lumens)</th>
-                    <th>Time</th>
+
+                            <th onclick="sortTable('id')">ID <span id="sortIcon-id">⇅</span></th>
+                            <th onclick="sortTable('temperature')">Temperature (°C) <span id="sortIcon-temperature">⇅</span></th>
+                            <th onclick="sortTable('humidity')">Humidity (%) <span id="sortIcon-humidity">⇅</span></th>
+                            <th onclick="sortTable('light')">Light (Lumens) <span id="sortIcon-light">⇅</span></th>
+                            <th onclick="sortTable('time')">Time <span id="sortIcon-time">⇅</span></th>
+
+                    
                 </tr>
-            </thead>
+            </thead>            
+            
             <tbody>
                 <!-- Data rows will be added here -->
                

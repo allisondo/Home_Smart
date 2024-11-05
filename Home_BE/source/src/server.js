@@ -54,6 +54,10 @@ app.post('/api/control/light', controlLight);
 app.post('/api/control/fan', controlFan);
 app.post('/api/control/conditioner', controlConditioner);
 
+
+
+// Gọi hàm kiểm tra trạng thái thiết bị mỗi 10 giây
+//setInterval(checkDeviceStatus, 60000); // Thêm dòng này
 // Chạy server trên cổng 5000
 const PORT = 5000;
 app.listen(PORT, () => {

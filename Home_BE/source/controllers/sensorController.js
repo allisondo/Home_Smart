@@ -1,65 +1,98 @@
 const { insertSensorData } = require('../models/sensorModel');
 const connection = require('../config/database'); // Kết nối tới MySQL
 
-// Hàm xử lý dữ liệu cảm biến và lưu vào MySQL
+
 const handleSensorData = (data) => {
     const temperature = data.temperature;
     const humidity = data.humidity;
-    const light = data.lux;
+    const light = data.light;
 
     insertSensorData(temperature, humidity, light, (err, results) => {
         if (err) {
             console.error('Lỗi khi chèn dữ liệu vào MySQL (sensors):', err);
-        } else {
-            console.log('Dữ liệu đã được chèn thành công vào bảng sensors:', results);
         }
+        //else {
+        //     console.log('Dữ liệu đã được chèn thành công vào bảng sensors:', results);
+        // }
     });
-};
-
-// API để lấy dữ liệu cảm biến từ bảng sensors
-
-// API để lấy dữ liệu cảm biến từ bảng sensors
+}
+// api lấy dữ liệu cảm biến từ bảng sensor
 const getSensorData = (req, res) => {
-    const { field = 'all', time } = req.query; // Mặc định field là 'all' nếu không có lựa chọn
+    console.log('Query parameters:', req.query);
+    const { field = 'all', search, page = 1, pageSize = 20, sortField = 'time', sortOrder = 'DESC' } = req.query;
 
-    // Mặc định luôn lấy ID và thời gian
-    let query = "SELECT id, time";
+    const offset = (page - 1) * pageSize;
 
-    // Tùy chọn thêm trường dữ liệu theo lựa chọn của người dùng
-    if (field === 'temperature') {
-        query += ", temperature";
-    } else if (field === 'humidity') {
-        query += ", humidity";
-    } else if (field === 'light') {
-        query += ", light";
-    } else if (field === 'all') {
-        query += ", temperature, humidity, light"; // Lấy tất cả dữ liệu
+    let query = "SELECT * FROM sensors WHERE 1=1";
+    let countQuery = "SELECT COUNT(*) AS totalCount FROM sensors WHERE 1=1";
+    let condition = "";
+
+    if (search) {
+        if (field.toLowerCase() === 'id') {
+            // Tìm kiếm chính xác theo ID
+            condition += ` AND id = ${connection.escape(search)}`;
+        } else {
+            const searchPattern = `%${search}%`; // Tìm kiếm chuỗi chứa giá trị tìm kiếm
+
+            if (field === 'temperature') {
+                condition += ` AND CAST(temperature AS CHAR) LIKE ${connection.escape(searchPattern)}`;
+            } else if (field === 'humidity') {
+                condition += ` AND CAST(humidity AS CHAR) LIKE ${connection.escape(searchPattern)}`;
+            } else if (field === 'light') {
+                condition += ` AND CAST(light AS CHAR) LIKE ${connection.escape(searchPattern)}`;
+            } else if (field === 'time') {
+                condition += ` AND DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') LIKE ${connection.escape(searchPattern)}`;
+            } else if (field === 'all') {
+                condition += ` AND (
+                                CAST(id AS CHAR) LIKE ${connection.escape(searchPattern)} 
+                                OR CAST(temperature AS CHAR) LIKE ${connection.escape(searchPattern)}
+                                OR CAST(humidity AS CHAR) LIKE ${connection.escape(searchPattern)}
+                                OR CAST(light AS CHAR) LIKE ${connection.escape(searchPattern)}
+                                OR DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') LIKE ${connection.escape(searchPattern)}
+                              )`;
+            }
+        }
     }
 
-    // Thêm phần FROM và điều kiện WHERE mặc định
-    query += " FROM sensors WHERE 1=1";
+    query += condition;
+    countQuery += condition;
+    query += ` ORDER BY ${connection.escapeId(sortField)} ${sortOrder === 'ASC' ? 'ASC' : 'DESC'} LIMIT ? OFFSET ?`;
 
-    // Nếu có thời gian, thêm điều kiện lọc theo thời gian
-    if (time) {
-        query += ` AND time = STR_TO_DATE('${time}', '%Y-%m-%dT%H:%i:%s')`;
-    } else {
-        // Nếu không có thời gian, sắp xếp theo thời gian mới nhất
-        query += " ORDER BY time DESC";
-    }
-
-    // Thực hiện truy vấn và trả về kết quả
-    connection.query(query, (err, results) => {
+    connection.query(query, [parseInt(pageSize), parseInt(offset)], (err, results) => {
         if (err) {
+            console.error("Lỗi khi truy vấn cơ sở dữ liệu:", err);
             return res.status(500).json({ error: "Lỗi khi truy vấn cơ sở dữ liệu" });
         }
-        res.json(results);
+
+        connection.query(countQuery, (countErr, countResults) => {
+            if (countErr) {
+                console.error("Lỗi khi lấy tổng số dòng từ cơ sở dữ liệu:", countErr);
+                return res.status(500).json({ error: "Lỗi khi lấy tổng số dòng từ cơ sở dữ liệu" });
+            }
+
+            const totalCount = countResults[0].totalCount;
+            const totalPages = Math.ceil(totalCount / pageSize);
+
+            res.json({
+                data: results,
+                pagination: {
+                    currentPage: parseInt(page),
+                    pageSize: parseInt(pageSize),
+                    totalRows: totalCount,
+                    totalPages: totalPages
+                }
+            });
+        });
     });
 };
 
 
+// Xuất hàm để sử dụng ở nơi khác
+module.exports = { getSensorData, handleSensorData };
 
 
 
 
-// Xuất cả hai hàm để có thể sử dụng ở nơi khác
-module.exports = { handleSensorData, getSensorData };
+
+
+
