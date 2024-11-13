@@ -8,6 +8,8 @@ const { handleDeviceData, getDeviceStatus } = require('../controllers/deviceCont
 const { getActivityHistory } = require('../controllers/activityController');
 const { controlLight, controlFan, controlConditioner } = require('../controllers/controlController');
 
+//const { getWarningStatus } = require('../controllers/deviceController');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -24,19 +26,30 @@ mqttClient.on('connect', () => {
     mqttClient.subscribe('phuongthao/esp8266/light/status');
     mqttClient.subscribe('phuongthao/esp8266/fan/status');
     mqttClient.subscribe('phuongthao/esp8266/conditioner/status');
+   
+  //  mqttClient.subscribe('phuongthao/esp8266/warning/status');
+
     console.log('Đã kết nối MQTT và subscribe các topic');
 });
 
 // Nhận dữ liệu từ các topic
 mqttClient.on('message', (topic, message) => {
-    const data = JSON.parse(message.toString());
+    let data;
+
+    try {
+        data = JSON.parse(message.toString());
+    } catch (error) {
+        data = { status: message.toString() }; // Xử lý các thông điệp không phải JSON
+    }
 
     if (topic === 'phuongthao/esp8266/sensor_data') {
-        handleSensorData(data);  // Xử lý dữ liệu cảm biến
+        handleSensorData(data); // Chỉ xử lý dữ liệu cảm biến
     } else {
-        handleDeviceData(topic, data);  // Xử lý dữ liệu thiết bị
+        handleDeviceData(topic, data); // Xử lý trạng thái thiết bị
     }
 });
+
+
 
 // ---------------- Express API Section ---------------- //
 
@@ -54,10 +67,11 @@ app.post('/api/control/light', controlLight);
 app.post('/api/control/fan', controlFan);
 app.post('/api/control/conditioner', controlConditioner);
 
+// API để lấy trạng thái cảnh báo hiện tại
+//app.get('/api/warning-status', getWarningStatus);
 
 
-// Gọi hàm kiểm tra trạng thái thiết bị mỗi 10 giây
-//setInterval(checkDeviceStatus, 60000); // Thêm dòng này
+
 // Chạy server trên cổng 5000
 const PORT = 5000;
 app.listen(PORT, () => {

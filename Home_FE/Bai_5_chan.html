@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bai 5</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css_bai5_chan.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation Tabs -->
+    <div class="header">
+      <div id="datetime" class="text-white mt-2"></div>
+      <h1>Bai 5</h1>
+      <div class="tabs">
+        <a class="nav-link text-white" href="Home.html">HOME ASSISTANT</a>
+        <a class="nav-link text-white" href="HomeBD.html">DATA SENSOR</a>
+        <a class="nav-link text-white" href="Activity_History.html">ACTIVITY HISTORY</a>
+        <a class="nav-link text-white" href="Profile.html">PERSONAL PROFILE</a>
+ 
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title text-center">Room Status</h2>
+          <div class="room-status">
+            <!-- Dust -->
+            <div class="status-item dust">
+              <p class="mb-0">
+                <i id="dustIcon" class="fas fa-smog"></i> Dust
+              </p>
+              <span id="dustDisplay">50 µg/m³</span>
+            </div>
+            <!-- Soil Moisture -->
+            <div class="status-item soil-moisture">
+              <p class="mb-0">
+                <i id="soilMoistureIcon" class="fas fa-water"></i> Soil Moisture
+              </p>
+              <span id="soilMoistureDisplay">40%</span>
+            </div>
+            <!-- Noise -->
+            <div class="status-item noise">
+              <p class="mb-0">
+                <i id="noiseIcon" class="fas fa-volume-up"></i> Noise
+              </p>
+              <span id="noiseDisplay">60 dB</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section: Chart and Controls -->
+      <div class="row">
+        <!-- Left: Chart -->
+        <div class="col-12"> <!-- Sửa từ col-md-8 thành col-12 -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="card-title text-center">Room Data</h2>
+              <canvas id="roomChart" width="400" height="90"></canvas>
+            </div>
+          </div>
+        </div>
+
+      
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="scriptbai5_chan.js"></script>
+    <script>
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', 
+          hour: '2-digit', minute: '2-digit', second: '2-digit' 
+        };
+        const dateTimeString = now.toLocaleDateString('en-US', options);
+        document.getElementById('datetime').textContent = dateTimeString;
+      }
+      
+      // Update time immediately and then every second
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 const mqtt = require('mqtt');
 
-const client = mqtt.connect('mqtt://192.168.69.187:1884', {
+const client = mqtt.connect('mqtt://192.168.3.187:1884', {
     username: 'phuongthao',
     password: '12345'
 });

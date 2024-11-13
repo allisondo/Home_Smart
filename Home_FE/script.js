@@ -1,23 +1,4 @@
 
-function updateDateTime() {
-    const now = new Date();
-    const options = { 
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', 
-        hour: '2-digit', minute: '2-digit', second: '2-digit' 
-    };
-    const dateTimeString = now.toLocaleDateString('en-US', options);
-    document.getElementById('datetime').textContent = dateTimeString;
-}
-
-// Cập nhật thời gian ngay khi tải trang và sau đó mỗi giây
-updateDateTime();
-setInterval(updateDateTime, 1000);
-
-
-
-
-
-
 function fetchSensorData() {
     fetch('http://localhost:5000/api/sensors?page=1&pageSize=10') // Thêm phân trang nếu cần
         .then(response => response.json())
@@ -115,7 +96,13 @@ function updateChart(data) {
 
                     }
                 },
-           
+                // y: {
+                //     title: {
+                //         display: true,
+                        
+                //     },
+                //     beginAtZero: true
+                // }
             }
         }
     });
@@ -314,11 +301,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchDeviceStatus();
 
     // Cập nhật trạng thái mỗi 5 giây
-    setInterval(fetchDeviceStatus, 5000);
+    setInterval(fetchDeviceStatus, 2000);
 });
 
-// Gọi hàm để lấy dữ liệu cảm biến và cập nhật giao diện mỗi 2 giây
-fetchSensorData();
-setInterval(fetchSensorData, 2000);
+
 
 

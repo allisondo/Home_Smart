@@ -13,10 +13,11 @@
             <a href="Home.html">HOME ASSISTANT</a>
             <a class="nav-link text-white" href="Activity_History.html">ACTIVITY HISTORY</a>
             <a class="nav-link text-white" href="Profile.html">PERSONAL PROFILE</a>
+            <a class="nav-link text-white" href="Bai_5_chan.html">BAI 5</a>
         </div>
     </div>
 
-     <div class="search-container">
+    <div class="search-container">
         <label for="searchOption">Tìm kiếm theo:</label>
         <select id="searchOption">
             <!-- Các lựa chọn tìm kiếm sẽ được thêm từ JavaScript -->
@@ -25,37 +26,33 @@
         <input type="text" id="searchValue" placeholder="Enter search value">
         <button onclick="performSearch()">Tìm kiếm</button>
     </div>
-    
-   
+
     <div class="table-container">
         <table id="dataTable">
             <thead>
                 <tr>
-
-                            <th onclick="sortTable('id')">ID <span id="sortIcon-id">⇅</span></th>
-                            <th onclick="sortTable('temperature')">Temperature (°C) <span id="sortIcon-temperature">⇅</span></th>
-                            <th onclick="sortTable('humidity')">Humidity (%) <span id="sortIcon-humidity">⇅</span></th>
-                            <th onclick="sortTable('light')">Light (Lumens) <span id="sortIcon-light">⇅</span></th>
-                            <th onclick="sortTable('time')">Time <span id="sortIcon-time">⇅</span></th>
-
-                    
+                    <th onclick="sortTable('id')">ID <span id="sortIcon-id">⇅</span></th>
+                    <th onclick="sortTable('temperature')">Temperature (°C) <span id="sortIcon-temperature">⇅</span></th>
+                    <th onclick="sortTable('humidity')">Humidity (%) <span id="sortIcon-humidity">⇅</span></th>
+                    <th onclick="sortTable('light')">Light (Lumens) <span id="sortIcon-light">⇅</span></th>
+                    <th onclick="sortTable('dust')">Dust (µg/m³) <span id="sortIcon-dust">⇅</span></th>
+                    <th onclick="sortTable('soilMoisture')">Soil Moisture (%) <span id="sortIcon-soilMoisture">⇅</span></th>
+                    <th onclick="sortTable('noise')">Noise (dB) <span id="sortIcon-noise">⇅</span></th>
+                    <th onclick="sortTable('time')">Time <span id="sortIcon-time">⇅</span></th>
                 </tr>
-            </thead>            
-            
+            </thead>
             <tbody>
                 <!-- Data rows will be added here -->
-               
                 <!-- Add more rows as needed -->
             </tbody>
         </table>
     </div>
 
-
     <div class="pagination">
         <label for="pageSize">Page size:</label>
         <select id="pageSize" onchange="changePageSize()">
             <option value="5" selected>5</option>
-            <option value="10" >10</option>
+            <option value="10">10</option>
             <option value="15">15</option>
             <option value="20">20</option>
         </select>
@@ -63,8 +60,6 @@
         <span id="page-info"></span>
         <button onclick="nextPage()">Next</button>
     </div>
-    
-
 
     <script src="pagination.js"></script>
 </body>

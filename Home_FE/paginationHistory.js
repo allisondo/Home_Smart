@@ -20,8 +20,7 @@ function sortTable(field) {
     }
 
     updateSortIcons();
-    sortDeviceData();
-    displayFilteredTable(deviceData, 'all'); // Hiển thị lại dữ liệu đã sắp xếp
+    fetchDeviceHistory(); // Gọi lại API để cập nhật dữ liệu
 }
 // Hàm sắp xếp dữ liệu trong mảng `deviceData`
 
@@ -59,7 +58,7 @@ function updateSortIcons() {
 }
 async function fetchDeviceHistory() {
     try {
-        let url = `http://localhost:5000/api/activity-history?page=${currentPage}&pageSize=${rowsPerPage}`;
+        let url = `http://localhost:5000/api/activity-history?page=${currentPage}&pageSize=${rowsPerPage}&sortField=${sortField}&sortOrder=${sortOrder}`;
         // Nếu có tìm kiếm, thêm search và field vào URL
         if (searchValue.trim() !== '') {
             url += `&field=${searchField}&search=${encodeURIComponent(searchValue)}`;
